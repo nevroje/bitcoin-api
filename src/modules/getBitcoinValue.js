@@ -1,10 +1,18 @@
-async function getBitcoinValueFromApiAsync() {
+const axios = require("axios");
+
+const getBitcoinValueApi = async () => {
   try {
-    const response = await fetch("https://api.livecoin.net/exchange/buymarket");
-    const responseJson = await response.json();
-    return responseJson.buymarket;
+    return await axios.get("https://api.livecoin.net/exchange/sellmarket");
   } catch (error) {
     console.log(error);
   }
+};
+
+const bitcoinValue = async () => {
+    const bitcoin = await getBitcoinValueApi()
+    if (bitcoin.data.message) {
+        console.log(getBitcoinValueApi)
+    }
 }
-export default getBitcoinValueFromApiAsync;
+
+export default getBitcoinValueApi;
