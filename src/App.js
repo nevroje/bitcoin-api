@@ -72,9 +72,31 @@ class App extends Component() {
       const newBtcDataSet = {...oldBtcDataSet};
       newBtcDataSet.data.push(value.price);
 
-      const newChartData
+      const newChartData = {
+        ...this.state.lineChartData,
+        datasets: [newBtcDataSet],
+        labels: this.state.lineChartData.labels.concat(
+          new Date().toLocaleTimeString()
+        )
+      };
+      this.setState({ lineChartData: newChartData });
     }
+  }
+  componentWillUnmount() {
+    this.ws.close();
+  }
+  render() {
+    const {classes} = this.props;
+
+    return (
+      <div className={classes["chart-container"]}>
+        <Chart
+          data={this.state.lineChartData}
+          options={this.state.lineChartOptions}
+        />
+      </div>
+    )
   }
 }
 
-export default App;
+export default withStyles(styles, {withTheme: true}) (App);
