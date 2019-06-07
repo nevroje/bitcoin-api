@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { render } from "react-dom";
 import { withStyles } from "@material-ui/core/styles";
 import Chart from "./chart";
@@ -9,7 +9,7 @@ const styles = theme => ({
   }
 });
 
-class App extends Component() {
+class App extends React.Component {
   state = {
     lineChartData: {
       labels: [],
@@ -29,7 +29,7 @@ class App extends Component() {
     },
     lineChartOptions: {
       responsive: true,
-      mainstainAspectRatio: false,
+      maintainAspectRatio: false,
       tooltips: {
         enabled: true
       },
@@ -38,7 +38,7 @@ class App extends Component() {
           {
             ticks: {
               autoSkip: true,
-              maxTicksLimit:10
+              maxTicksLimit: 10
             }
           }
         ]
@@ -55,13 +55,14 @@ class App extends Component() {
           product_ids: ["BTC-USD"]
         }
       ]
-    }
+    };
 
     this.ws = new WebSocket("wss://ws-feed.gdax.com");
 
     this.ws.onopen = () => {
-      this.ws.send(JSON.stringify(subscribe))
+      this.ws.send(JSON.stringify(subscribe));
     };
+
     this.ws.onmessage = e => {
       const value = JSON.parse(e.data);
       if (value.type !== "ticker") {
@@ -69,7 +70,7 @@ class App extends Component() {
       }
 
       const oldBtcDataSet = this.state.lineChartData.datasets[0];
-      const newBtcDataSet = {...oldBtcDataSet};
+      const newBtcDataSet = { ...oldBtcDataSet };
       newBtcDataSet.data.push(value.price);
 
       const newChartData = {
@@ -80,13 +81,15 @@ class App extends Component() {
         )
       };
       this.setState({ lineChartData: newChartData });
-    }
+    };
   }
+
   componentWillUnmount() {
     this.ws.close();
   }
+
   render() {
-    const {classes} = this.props;
+    const { classes } = this.props;
 
     return (
       <div className={classes["chart-container"]}>
@@ -95,8 +98,8 @@ class App extends Component() {
           options={this.state.lineChartOptions}
         />
       </div>
-    )
+    );
   }
 }
 
-export default withStyles(styles, {withTheme: true}) (App);
+export default withStyles(styles, { withTheme: true })(App);
